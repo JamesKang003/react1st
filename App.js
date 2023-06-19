@@ -1,18 +1,41 @@
 import React from "react"
-import Header from "./components/Header"
-import Meme from "./components/Meme"
-/**
- * Challenge: 
- * - Create a Meme component.
- * - Inside the Meme component, render a styled form
- *   with our 2 inputs and the button.
- * - Don't worry about adding any functionality yet
- */
+import boxes from "./boxes"
+import Box from "./Box"
+
 export default function App() {
+    const [squares, setSquares] = React.useState(boxes)
+    
+    function toggle(id) {
+        setSquares(prevSquares => {
+            const newSquares = []
+            for(let i = 0; i < prevSquares.length; i++) {
+                const currentSquare = prevSquares[i]
+                if(currentSquare.id === id) {
+                    const updatedSquare = {
+                        ...currentSquare,
+                        on: !currentSquare.on
+                    }
+                    newSquares.push(updatedSquare)
+                } else {
+                    newSquares.push(currentSquare)
+                }
+            }
+            return newSquares
+        })
+    }
+    
+    const squareElements = squares.map(square => (
+        <Box 
+            key={square.id} 
+            id={square.id}
+            on={square.on} 
+            toggle={toggle}
+        />
+    ))
+    
     return (
-        <div>
-            <Header />
-            <Meme />
-        </div>
+        <main>
+            {squareElements}
+        </main>
     )
 }
